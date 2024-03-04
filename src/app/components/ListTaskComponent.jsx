@@ -6,23 +6,24 @@ import AlertComponent from "@/app/components/AlertComponent";
 
 function ListTasksComponent({ tasks }) {
   const [state, setState] = useState(false);
-  const [message, setMessage] = useState(false);
+  const [title, setTitle] = useState(false);
+  const [id, setID] = useState();
 
-  const changeStateByIcon = (state) => {
-    setState(state);
-  };
 
-  const changeMessage = (message) => {
-    setMessage(message);
-  };
+  const setDataAlert = (data) =>{
+    setState(data.state);
+    setTitle(data.title);
+    setID(data.id);
+  }
 
   return (
     <>
       <div className={state ? "bg-red-600 fixed top-0 z-10 flex justify-center items-center w-full" : "hidden"}>
         <AlertComponent
-          message={`¿Esta seguro de eliminar "${message}"?`}
+          message={`¿Está seguro de eliminar "${title}"?`}
           state={state}
-          onClose={changeStateByIcon}
+          id={id}
+          onClose={()=>{setState(false)}}
         />
       </div>
       <div className="grid grid-cols-3 gap-5 p-5">
@@ -30,8 +31,7 @@ function ListTasksComponent({ tasks }) {
           <TasksComponent
             task={task}
             key={task.id}
-            changeState={changeStateByIcon}
-            changeMessage={changeMessage}
+            setDataAlert={setDataAlert}
           />
         ))}
       </div>

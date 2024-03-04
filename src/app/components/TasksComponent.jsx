@@ -3,7 +3,7 @@
 import { useRouter } from "next/navigation";
 import { AiFillCloseCircle } from "react-icons/ai";
 
-function TasksComponent({ task, changeState, changeMessage }) {
+function TasksComponent({ task, setDataAlert}) {
   const router = useRouter();
   return (
     <div className="relative">
@@ -20,8 +20,15 @@ function TasksComponent({ task, changeState, changeMessage }) {
         "
         color="rgb(127 29 29)"
         onClick={() => {
-          changeState(true);
-          changeMessage(task.title)
+          const data = {
+            state: true,
+            title: task.title,
+            id: task.id
+          }
+          setDataAlert(data);
+          // changeState(true);
+          // changeMessage(task.title)
+          // changeID(task.id);
         }}
       />
 
