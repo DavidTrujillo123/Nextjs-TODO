@@ -1,6 +1,7 @@
 import { prisma } from "@/libs/prisma";
 import ListTasksComponent from "./components/ListTaskComponent";
 
+
 async function loadTasks() {
   return await prisma.task.findMany();
 }
