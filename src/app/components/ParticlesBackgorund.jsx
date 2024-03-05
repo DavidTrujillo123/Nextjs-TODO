@@ -9,7 +9,7 @@ const ParticlesBackgorund = () => {
   useEffect(() => {
     initParticlesEngine(async (engine) => {
       // await loadFull(engine);
-      // await loadSlim(engine);
+      //await loadSlim(engine);
       await loadAll(engine);
     }).then(() => {
       setInit(true);

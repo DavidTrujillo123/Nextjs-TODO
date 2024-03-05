@@ -9,33 +9,38 @@ function ListTasksComponent({ tasks }) {
   const [title, setTitle] = useState(false);
   const [id, setID] = useState();
 
-
-  const setDataAlert = (data) =>{
+  const setDataAlert = (data) => {
     setState(data.state);
     setTitle(data.title);
     setID(data.id);
-  }
+  };
 
   return (
-    <>
-      <div className={state ? "bg-red-600 fixed top-0 z-10 flex justify-center items-center w-full" : "hidden"}>
-        <AlertComponent
-          message={`¿Está seguro de eliminar "${title}"?`}
-          state={state}
-          id={id}
-          onClose={()=>{setState(false)}}
-        />
-      </div>
-      <div className="grid grid-cols-3 gap-5 p-5">
-        {tasks.map((task) => (
+    <div className="">
+      {state && (
+        <div className="flex justify-center items-center">
+          <AlertComponent
+            message={`¿Está seguro de eliminar "${title}"?`}
+            state={state}
+            id={id}
+            onClose={() => {
+              setState(false);
+            }}
+          />
+        </div>
+      )}
+
+      <div className="grid grid-cols-1 md:grid-cols-3 gap-5 px-4">
+        {tasks.map((task, i) => (
           <TasksComponent
             task={task}
             key={task.id}
+            id={i}
             setDataAlert={setDataAlert}
           />
         ))}
       </div>
-    </>
+    </div>
   );
 }
 

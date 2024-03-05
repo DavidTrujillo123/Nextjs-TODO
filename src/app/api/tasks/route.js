@@ -2,7 +2,8 @@ import { NextResponse } from "next/server";
 import { prisma } from "@/libs/prisma";
 
 export async function GET() {
-  const tasks = await prisma.task.findMany();
+  const tasks = await prisma.task.findMany({orderBy: {status: false}});
+  console.log(tasks);
   return NextResponse.json(tasks);
 }
 
@@ -11,7 +12,7 @@ export async function POST(request) {
   //const data = await request.json();
 
   //Alternativa
-  const { title, description } = await request.json();
+  const { title, description} = await request.json();
 
   //Guarda en la base de datos
   const newTask = await prisma.task.create({
@@ -22,6 +23,7 @@ export async function POST(request) {
     data: {
       title,
       description,
+      status: false
     },
   });
   return NextResponse.json(newTask);

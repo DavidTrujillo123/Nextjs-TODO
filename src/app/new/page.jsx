@@ -8,6 +8,16 @@ function NewTask({ params }) {
   const [title, setTitle] = useState("");
   const [description, setDescription] = useState("");
 
+  const deleteTask = async () => {
+    await fetch(`/api/tasks/${params.id}`, {
+      method: "DELETE",
+      body: JSON.stringify({ id: params.id }),
+      headers: { "Content-Type": "application/json" },
+    });
+    router.push("/");
+    router.refresh();
+  };
+
   let eventSubmit = () => {};
 
   if (params.id) {
@@ -20,7 +30,7 @@ function NewTask({ params }) {
         });
     }, []);
 
-    eventSubmit = async () => {
+    eventSubmit = async (title, description) => {
       const res = await fetch(`/api/tasks/${params.id}`, {
         method: "PUT",
         body: JSON.stringify({ title, description }),
@@ -29,7 +39,8 @@ function NewTask({ params }) {
       return res;
     };
   } else {
-    eventSubmit = async () => {
+    eventSubmit = async (title, description) => {
+      
       const res = await fetch("/api/tasks/", {
         method: "POST",
         body: JSON.stringify({ title, description }),
@@ -42,7 +53,7 @@ function NewTask({ params }) {
   const onSubmit = async (e) => {
     e.preventDefault();
 
-    const res = await eventSubmit();
+    const res = await eventSubmit(title.trim(), description.trim());
    
     const data = await res.json();
     console.log(data);
@@ -52,9 +63,9 @@ function NewTask({ params }) {
   };
 
   return (
-    <div className="h-screen flex justify-center items-center">
+    <div className="h-[calc(100vh-100px)] flex justify-center items-center">
       <form
-        className="bg-slate-800 p-10 lg:w-1/4 w-[350px] rounded-md"
+        className="bg-slate-800 p-10 lg:w-1/3 w-[350px] rounded-md"
         onSubmit={onSubmit}
       >
         <label htmlFor="title" className="font-bold text-sm">
@@ -76,7 +87,7 @@ function NewTask({ params }) {
         </label>
         <textarea
           id="description"
-          rows="3"
+          rows="4"
           className="border-gray-400 p-2 mb-4 w-full text-black"
           placeholder="Describe tu tarea"
           onChange={(e) => {
@@ -85,9 +96,23 @@ function NewTask({ params }) {
           value={description}
         />
 
-        <button className="bg-red-950 py-3 px-4 rounded hover:bg-red-800 font-bold">
-          Crear
-        </button>
+        <div className="flex justify-between">
+          <button className="py-3 px-4 rounded font-bold bg-green-950 hover:bg-green-400">
+            Guardar
+          </button>
+
+          { params.id && (
+            <button 
+              type="button" 
+              className="bg-red-950 py-3 px-4 rounded hover:bg-red-800 font-bold"
+              onClick={deleteTask}
+            >
+              Eliminar
+            </button>
+          )}
+
+        </div>
+      
       </form>
     </div>
   );
